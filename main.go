@@ -11,13 +11,16 @@ import (
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 var router *gin.Engine
 
+var db *gorm.DB
+
 //go:embed template
 var templateFS embed.FS
-
 //go:embed static
 var staticFS embed.FS
 
@@ -28,12 +31,14 @@ func init() {
 		gin.DefaultErrorWriter, _ = os.Create(os.Getenv("GOPATH") + "/gin_error.log")
 	}
 
-	router = gin.Default()
-
 	//从嵌入式文件系统加载模板和静态资源
+	router = gin.Default()
 	router.HTMLRender = loadTemplates()
 	subStatic, _ := fs.Sub(staticFS, "static")
 	router.StaticFS("/static", http.FS(subStatic))
+
+	ds := sqlite.Open("sqlite.db")
+	db, _ = gorm.Open(ds, &gorm.Config{})
 }
 
 func main() {
