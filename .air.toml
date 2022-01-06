@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
   bin = "tmp/${PWD##*/}"
   cmd = "go build -o tmp/${PWD##*/} ."
-  delay = 1000
+  delay = 500
   exclude_dir = ["tmp"]
   exclude_file = []
   exclude_regex = ["_test.go"]
