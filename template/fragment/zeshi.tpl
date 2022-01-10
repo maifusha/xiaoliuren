@@ -1,4 +1,4 @@
-{{define "fragment/dsjx"}}
+{{define "fragment/zeshi"}}
 <div class="row">
 
 </div>

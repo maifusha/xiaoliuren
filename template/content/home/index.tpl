@@ -10,16 +10,16 @@
         <div class="col-sm-8 col-sm-offset-2 well">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#dsjx" aria-controls="dsjx" role="tab" data-toggle="tab">断事吉凶</a></li>
-                <li role="presentation"><a href="#jsmj" aria-controls="jsmj" role="tab" data-toggle="tab">即时迷津</a></li>
-                <li role="presentation"><a href="#mszs" aria-controls="mszs" role="tab" data-toggle="tab">谋事择时</a></li>
+                <li role="presentation" class="active"><a href="#jixiong" aria-controls="jixiong" role="tab" data-toggle="tab">断事吉凶</a></li>
+                <li role="presentation"><a href="#dianbo" aria-controls="dianbo" role="tab" data-toggle="tab">即时点拨</a></li>
+                <li role="presentation"><a href="#zeshi" aria-controls="zeshi" role="tab" data-toggle="tab">谋事择时</a></li>
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="dsjx">{{template "fragment/dsjx" .}}</div>
-                <div role="tabpanel" class="tab-pane" id="jsmj">{{template "fragment/jsmj" .}}</div>
-                <div role="tabpanel" class="tab-pane" id="mszs">{{template "fragment/jsmj" .}}</div>
+                <div role="tabpanel" class="tab-pane active" id="jixiong">{{template "fragment/jixiong" .}}</div>
+                <div role="tabpanel" class="tab-pane" id="dianbo">{{template "fragment/dianbo" .}}</div>
+                <div role="tabpanel" class="tab-pane" id="zeshi">{{template "fragment/zeshi" .}}</div>
             </div>
         </div>
     </div>

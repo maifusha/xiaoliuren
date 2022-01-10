@@ -1,4 +1,4 @@
-{{define "fragment/mszs"}}
+{{define "fragment/dianbo"}}
 <div class="row">
 
 </div>
