@@ -42,4 +42,3 @@ func (t *templateKit) MultiRender() multitemplate.Renderer {
 
 	return r
 }
-
