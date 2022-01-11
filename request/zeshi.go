@@ -2,11 +2,11 @@ package request
 
 import "time"
 
-type zeshi struct {
-	LiushenId int       `json:"liushen_id" binding:"required"`
+type Zeshi struct {
+	LiushenId int       `json:"liushen_id" binding:"required,gte=1,lte=6"`
 	Date      time.Time `json:"date" binding:"required"`
 }
 
-func NewZeshi() *zeshi {
-	return &zeshi{}
+func NewZeshi() *Zeshi {
+	return &Zeshi{}
 }

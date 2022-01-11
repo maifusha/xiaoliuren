@@ -2,13 +2,13 @@ package model
 
 import "gorm.io/gorm"
 
-type qiuwen struct {
+type Qiuwen struct {
 	gorm.Model
 	LiushenId uint
-	Type string
-	Sentence string
+	Type      string
+	Sentence  string
 }
 
-func NewQiuwen() *qiuwen {
-	return &qiuwen{}
+func NewQiuwen() *Qiuwen {
+	return &Qiuwen{}
 }

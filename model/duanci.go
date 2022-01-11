@@ -2,12 +2,12 @@ package model
 
 import "gorm.io/gorm"
 
-type duanci struct {
+type Duanci struct {
 	gorm.Model
 	LiushenId uint
-	Sentence string
+	Sentence  string
 }
 
-func NewDuanci() *duanci {
-	return &duanci{}
+func NewDuanci() *Duanci {
+	return &Duanci{}
 }

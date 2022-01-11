@@ -21,13 +21,11 @@ type lunar struct {
 	Year, Month, Day string
 }
 
-func newLunarBySolar(solar string) *lunar {
-	solarTime, _ := time.ParseInLocation("2006-01-02", solar, time.Local)
-
+func NewLunarBySolar(solar time.Time) *lunar {
 	year := ""
 	month := ""
 	day := ""
-	lunarStr := thirdlunar.Lunar(solarTime.Format("20060102"))
+	lunarStr := thirdlunar.Lunar(solar.Format("20060102"))
 	fmt.Scanf(lunarStr, "%s年%s月%s", &year, &month, &day)
 
 	return &lunar{
