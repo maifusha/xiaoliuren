@@ -6,8 +6,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"xiaoliuren/config"
+	"xiaoliuren/lib/calendar"
 	"xiaoliuren/lib/templatekit"
 	"xiaoliuren/request"
 	"xiaoliuren/service"
@@ -50,11 +52,11 @@ func main() {
 		}
 
 		svc := service.NewXiaoliuren()
-		yuePan, riPan, shiPan := svc.GetSanPan(req.Date, req.DizhiIndex, req.LiushenId)
+		yuePan, riPan, shiPan := svc.GetSanPan(req.Qike, req.Date, req.Dizhi)
 
 		c.JSON(http.StatusOK, gin.H{
-			"lunar_time": svc.GetLunarTime(req.Date, req.DizhiIndex),
-			"solar_time": svc.GetSolarTime(req.Date, req.DizhiIndex),
+			"lunar_time": svc.GetLunarTime(req.Date, req.Dizhi),
+			"solar_time": svc.GetSolarTime(req.Date, req.Dizhi),
 			"sanpan": gin.H{
 				"yue_pan": yuePan,
 				"ri_pan":  riPan,
@@ -64,8 +66,16 @@ func main() {
 	})
 
 	router.GET("/home/dianbo", func(c *gin.Context) {
+		svc := service.NewXiaoliuren()
+		date := time.Now()
+		dizhi := calendar.NowDizhi()
 
-		c.JSON(http.StatusOK, gin.H{})
+		c.JSON(http.StatusOK, gin.H{
+			"lunar_time": svc.GetLunarTime(date, dizhi),
+			"solar_time": svc.GetSolarTime(date, dizhi),
+			"liushen":    "",
+			"duanci":     "",
+		})
 	})
 
 	router.GET("/home/zeshi", func(c *gin.Context) {

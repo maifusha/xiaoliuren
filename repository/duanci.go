@@ -1,6 +1,9 @@
 package repository
 
-import "xiaoliuren/model"
+import (
+	"xiaoliuren/lib/liushen"
+	"xiaoliuren/model"
+)
 
 type Duanci struct {
 	model *model.Duanci
@@ -16,7 +19,7 @@ func (d *Duanci) SetModelById(id uint) {
 	d.model = model
 }
 
-func (d *Duanci) FindByLiushen(liushenId int) (models []model.Duanci) {
-	Db.Find(&models, "liushen_id=?", liushenId)
+func (d *Duanci) FindByGongwei(gongwei liushen.Gongwei) (models []model.Duanci) {
+	Db.Find(&models, "liushen_id=?", gongwei)
 	return
 }

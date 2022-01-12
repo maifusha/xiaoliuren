@@ -1,6 +1,9 @@
 package repository
 
-import "xiaoliuren/model"
+import (
+	"xiaoliuren/lib/liushen"
+	"xiaoliuren/model"
+)
 
 type Qiuwen struct {
 	model *model.Qiuwen
@@ -16,7 +19,7 @@ func (q *Qiuwen) SetModelById(id uint) {
 	q.model = model
 }
 
-func (q *Qiuwen) FindByLiushen(liushenId int) (models []model.Qiuwen) {
-	Db.Find(&models, "liushen_id", liushenId)
+func (q *Qiuwen) FingByGongwei(gongwei liushen.Gongwei) (models []model.Qiuwen) {
+	Db.Find(&models, "liushen_id", gongwei)
 	return
 }
