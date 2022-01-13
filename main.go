@@ -44,7 +44,11 @@ func init() {
 
 func main() {
 	router.GET("/home/index", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "home/index.tpl", gin.H{})
+		svc := service.NewXiaoliuren()
+
+		c.HTML(http.StatusOK, "home/index.tpl", gin.H{
+			"qike_list": svc.LiushenList(),
+		})
 	})
 
 	router.GET("/home/jixiong", func(c *gin.Context) {
@@ -88,13 +92,15 @@ func main() {
 
 		go func() {
 			defer wg.Done()
-			qiuwenList = svc.GetQiuwenList(gongwei)
+			qiuwenList = svc.QiuwenList(gongwei)
 		}()
 
 		go func() {
 			defer wg.Done()
-			duanciList = svc.GetDuanciList(gongwei)
+			duanciList = svc.DuanciList(gongwei)
 		}()
+
+		wg.Wait()
 
 		c.JSON(http.StatusOK, gin.H{
 			"lunar_time":  svc.GetLunarTime(date, dizhi),
@@ -112,7 +118,17 @@ func main() {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{})
+		svc := service.NewXiaoliuren()
+		daanList, liulianList, suxiList, chikouList, xiaojiList, kongwangList := svc.JudgeHoursForDate(req.Qike, req.Date)
+
+		c.JSON(http.StatusOK, gin.H{
+			"daan":     daanList,
+			"lulian":   liulianList,
+			"suxi":     suxiList,
+			"chikou":   chikouList,
+			"xiaoji":   xiaojiList,
+			"kongwang": kongwangList,
+		})
 	})
 
 	log.Fatal(router.Run(config.HOST + ":" + config.PORT))

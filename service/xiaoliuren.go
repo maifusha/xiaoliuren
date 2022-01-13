@@ -31,6 +31,12 @@ func (x *xiaoliuren) GetSolarTime(date time.Time, dizhi calendar.Dizhi) string {
 	return fmt.Sprintf("%s %s", date.Format("2006-01-02"), dizhiHour.Period())
 }
 
+func (x *xiaoliuren) LiushenList() []model.Liushen {
+	qikeList := repository.NewLiushen().FindAll()
+
+	return qikeList
+}
+
 func (x *xiaoliuren) GetSanPan(qike liushen.Gongwei, date time.Time, dizhi calendar.Dizhi) (yuePan *liushen.Jieke, riPan *liushen.Jieke, shiPan *liushen.Jieke) {
 	lunar := calendar.NewLunarBySolar(date)
 	dizhiHour := calendar.NewDizhiHour(dizhi)
@@ -74,14 +80,47 @@ func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) *model.Liushen {
 	return shengong
 }
 
-func (x *xiaoliuren) GetQiuwenList(gongwei liushen.Gongwei) []model.Qiuwen {
+func (x *xiaoliuren) QiuwenList(gongwei liushen.Gongwei) []model.Qiuwen {
 	qiuwenList := repository.NewQiuwen().FingByGongwei(gongwei)
 
 	return qiuwenList
 }
 
-func (x *xiaoliuren) GetDuanciList(gongwei liushen.Gongwei) []model.Duanci {
+func (x *xiaoliuren) DuanciList(gongwei liushen.Gongwei) []model.Duanci {
 	duanciList := repository.NewDuanci().FindByGongwei(gongwei)
 
 	return duanciList
+}
+
+func (x *xiaoliuren) JudgeHoursForDate(qike liushen.Gongwei, date time.Time) (
+	daanList []interface{},
+	suxiList []interface{},
+	xiaojiList []interface{},
+	liulianList []interface{},
+	chikouList []interface{},
+	kongwangList []interface{},
+) {
+	for k, v := range calendar.DizhiHours {
+		item := struct {
+			DizhiName string `json:"dizhi_name"`
+			SolarTime string `json:"solar_time"`
+		}{v[0], fmt.Sprintf("%s %s", date.Format("2006-01-02"), v[1])}
+
+		switch liushen.LuogongByTime(qike, date, k) {
+		case liushen.DAAN:
+			daanList = append(daanList, item)
+		case liushen.LIULIAN:
+			liulianList = append(liulianList, item)
+		case liushen.SUXI:
+			suxiList = append(suxiList, item)
+		case liushen.CHIKOU:
+			chikouList = append(chikouList, item)
+		case liushen.XIAOJI:
+			xiaojiList = append(xiaojiList, item)
+		case liushen.KONGWANG:
+			kongwangList = append(kongwangList, item)
+		}
+	}
+
+	return
 }
