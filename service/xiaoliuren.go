@@ -7,6 +7,7 @@ import (
 
 	"xiaoliuren/lib/calendar"
 	"xiaoliuren/lib/liushen"
+	"xiaoliuren/model"
 	"xiaoliuren/repository"
 )
 
@@ -61,8 +62,26 @@ func (x *xiaoliuren) GetSanPan(qike liushen.Gongwei, date time.Time, dizhi calen
 }
 
 func (x *xiaoliuren) JieKe(qike liushen.Gongwei, count int) *liushen.Jieke {
-	luogong := liushen.LuogongByCount(qike, count)
-	model := repository.NewLiushen().FindById(int(luogong))
+	gongwei := liushen.LuogongByCount(qike, count)
+	model := repository.NewLiushen().FindById(int(gongwei))
 
-	return liushen.NewJieke(luogong, model.Name, model.Shiyi)
+	return liushen.NewJieke(gongwei, model.Name, model.Shiyi)
+}
+
+func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) *model.Liushen {
+	shengong := repository.NewLiushen().FindById(int(gongwei))
+
+	return shengong
+}
+
+func (x *xiaoliuren) GetQiuwenList(gongwei liushen.Gongwei) []model.Qiuwen {
+	qiuwenList := repository.NewQiuwen().FingByGongwei(gongwei)
+
+	return qiuwenList
+}
+
+func (x *xiaoliuren) GetDuanciList(gongwei liushen.Gongwei) []model.Duanci {
+	duanciList := repository.NewDuanci().FindByGongwei(gongwei)
+
+	return duanciList
 }

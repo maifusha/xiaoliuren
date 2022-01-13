@@ -9,7 +9,7 @@ type Qiuwen struct {
 	model *model.Qiuwen
 }
 
-func newQiuwen() *Qiuwen {
+func NewQiuwen() *Qiuwen {
 	return &Qiuwen{model: model.NewQiuwen()}
 }
 

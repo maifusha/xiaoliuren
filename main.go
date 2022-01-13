@@ -6,11 +6,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 
 	"xiaoliuren/config"
 	"xiaoliuren/lib/calendar"
+	"xiaoliuren/lib/liushen"
 	"xiaoliuren/lib/templatekit"
+	"xiaoliuren/model"
 	"xiaoliuren/request"
 	"xiaoliuren/service"
 
@@ -66,15 +69,39 @@ func main() {
 	})
 
 	router.GET("/home/dianbo", func(c *gin.Context) {
-		svc := service.NewXiaoliuren()
 		date := time.Now()
 		dizhi := calendar.NowDizhi()
+		gongwei := liushen.LuogongByTime(liushen.DAAN, date, dizhi)
+
+		svc := service.NewXiaoliuren()
+		var shengong *model.Liushen
+		var qiuwenList []model.Qiuwen
+		var duanciList []model.Duanci
+
+		var wg sync.WaitGroup
+		wg.Add(3)
+
+		go func() {
+			defer wg.Done()
+			shengong = svc.GetShengong(gongwei)
+		}()
+
+		go func() {
+			defer wg.Done()
+			qiuwenList = svc.GetQiuwenList(gongwei)
+		}()
+
+		go func() {
+			defer wg.Done()
+			duanciList = svc.GetDuanciList(gongwei)
+		}()
 
 		c.JSON(http.StatusOK, gin.H{
-			"lunar_time": svc.GetLunarTime(date, dizhi),
-			"solar_time": svc.GetSolarTime(date, dizhi),
-			"liushen":    "",
-			"duanci":     "",
+			"lunar_time":  svc.GetLunarTime(date, dizhi),
+			"solar_time":  svc.GetSolarTime(date, dizhi),
+			"shengong":    shengong,
+			"qiuwen_list": qiuwenList,
+			"duanci_list": duanciList,
 		})
 	})
 
