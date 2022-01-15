@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type Qiuwen struct {
 	gorm.Model
-	LiushenId uint
-	Type      string
-	Sentence  string
+	LiushenId uint   `json:"liushen_id"`
+	Type      string `json:"type"`
+	Sentence  string `json:"sentence"`
 }
 
 func NewQiuwen() *Qiuwen {

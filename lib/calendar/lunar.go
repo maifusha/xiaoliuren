@@ -44,5 +44,5 @@ func (l *lunar) DayInt() int {
 }
 
 func (l *lunar) String() string {
-	return l.Year + l.Month + l.Day
+	return fmt.Sprintf("%s %s%s", l.Year, l.Month, l.Day)
 }

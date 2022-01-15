@@ -47,7 +47,8 @@ func main() {
 		svc := service.NewXiaoliuren()
 
 		c.HTML(http.StatusOK, "home/index.tpl", gin.H{
-			"qike_list": svc.LiushenList(),
+			"qikeList":  svc.LiushenList(),
+			"dizhiList": calendar.DizhiHours,
 		})
 	})
 

@@ -22,7 +22,7 @@ func (x *xiaoliuren) GetLunarTime(date time.Time, dizhi calendar.Dizhi) string {
 	lunar := calendar.NewLunarBySolar(date)
 	dizhiHour := calendar.NewDizhiHour(dizhi)
 
-	return fmt.Sprintf("%s%s", lunar.String(), dizhiHour.Name())
+	return fmt.Sprintf("%s %s", lunar.String(), dizhiHour.Name())
 }
 
 func (x *xiaoliuren) GetSolarTime(date time.Time, dizhi calendar.Dizhi) string {
