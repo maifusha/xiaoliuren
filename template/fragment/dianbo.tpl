@@ -1,6 +1,6 @@
 {{define "fragment/dianbo"}}
 <div class="row page-header">
-    <div class="col-sm-4">
+    <div class="col-sm-5">
         <blockquote>临时起意，即刻起卦，指点迷津。</blockquote>
     </div>
     <div class="col-sm-4 col-sm-offset-2">
@@ -13,7 +13,7 @@
 <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <span class="h4">解 课</span>
+            <span class="h4">解 课 > </span>
 
             <span style="margin-left: 15px;font-weight: 400;">甲子年正月初二子时</span>
             <small>（<span>2011-01-01 13:22</span>）</small>
@@ -37,7 +37,7 @@
                 <td class="col-sm-4">位在东方</td>
         </table>
 
-        <div class="row">
+        <div class="row" style="margin: 0;">
             <div class="col-sm-6">
                 <strong>解惑</strong>
                 <table class="table table-bordered table-hover">

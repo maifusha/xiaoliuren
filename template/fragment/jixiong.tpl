@@ -3,7 +3,7 @@
     <div class="row row-no-gutters">
         <div class="col-sm-5">
             <span class="help-block">六神起课：所卦事项类型</span>
-            <div class="form-group row input-lg" style="padding-top: 0;">
+            <div class="form-group row row-no-gutters" style="padding-top: 0;line-height: 2;">
                 {{range .qikeList}}
                 <div class="radio">
                     <label>
@@ -15,16 +15,16 @@
             </div>
         </div>
 
-        <div class="col-sm-3">
+        <div class="col-sm-3 col-sm-pull-1" style="padding-left: 5%;">
             <span class="help-block">事发日期</span>
             <div class="form-group">
                 {{template "fragment/date" .}}
             </div>
         </div>
 
-        <div class="col-sm-4 form-inline">
+        <div class="col-sm-4 form-inline" style="padding-left: 10px;">
             <span class="help-block">事发时辰</span>
-            <div class="form-group row input-lg" style="line-height: 1.8;">
+            <div class="form-group row row-no-gutters" style="line-height: 2.5;">
                 {{range $k,$v := .dizhiList}}
                 <div class="radio col-sm-6">
                     <label>
@@ -48,19 +48,18 @@
 <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <span class="h4">解 课</span>
-
+            <span class="h4">解 课 > </span>
             <span style="margin-left: 15px;font-weight: 400;">甲子年正月初二子时</span>
             <small>（<span>2011-01-01 13:22</span>）</small>
         </h3>
     </div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-5">
                 <img src="/static/image/sixiangbagua.jpg" class="img-responsive center-block img-thumbnail" alt="Responsive image">
             </div>
-            <div class="col-sm-8">
-                <table class="table table-bordered table-hover">
+            <div class="col-sm-7">
+                <table class="table table-bordered table-hover" style="padding-left: 20px;">
                     <tr class="row">
                         <td class="active text-center col-sm-3" style="vertical-align: middle;"><strong>月盘</strong> <small>(事项初期)</small></td>
                         <td class="col-sm-9">
