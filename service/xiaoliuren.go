@@ -80,10 +80,10 @@ func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) *model.Liushen {
 	return shengong
 }
 
-func (x *xiaoliuren) QiuwenList(gongwei liushen.Gongwei) []model.Qiuwen {
-	qiuwenList := repository.NewQiuwen().FingByGongwei(gongwei)
+func (x *xiaoliuren) JiehuoList(gongwei liushen.Gongwei) []model.Jiehuo {
+	jiehuoList := repository.NewJiehuo().FingByGongwei(gongwei)
 
-	return qiuwenList
+	return jiehuoList
 }
 
 func (x *xiaoliuren) DuanciList(gongwei liushen.Gongwei) []model.Duanci {

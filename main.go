@@ -80,7 +80,7 @@ func main() {
 
 		svc := service.NewXiaoliuren()
 		var shengong *model.Liushen
-		var qiuwenList []model.Qiuwen
+		var jiehuoList []model.Jiehuo
 		var duanciList []model.Duanci
 
 		var wg sync.WaitGroup
@@ -93,7 +93,7 @@ func main() {
 
 		go func() {
 			defer wg.Done()
-			qiuwenList = svc.QiuwenList(gongwei)
+			jiehuoList = svc.JiehuoList(gongwei)
 		}()
 
 		go func() {
@@ -107,7 +107,7 @@ func main() {
 			"lunar_time":  svc.GetLunarTime(date, dizhi),
 			"solar_time":  svc.GetSolarTime(date, dizhi),
 			"shengong":    shengong,
-			"qiuwen_list": qiuwenList,
+			"jiehuo_list": jiehuoList,
 			"duanci_list": duanciList,
 		})
 	})

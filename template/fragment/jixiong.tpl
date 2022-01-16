@@ -38,7 +38,9 @@
     </div>
     <div class="row" style="margin-top: 30px;margin-bottom: 20px;">
         <div class="col-sm-6 col-sm-offset-3">
-            <button type="button" class="btn btn-warning btn-block center-block"> 起 卦</button>
+            <button type="button" class="btn btn-warning btn-block center-block">
+                <div class="row"><div class="col-sm-6">起</div><div class="col-sm-6">卦</div></div>
+            </button>
         </div>
     </div>
 </form>
