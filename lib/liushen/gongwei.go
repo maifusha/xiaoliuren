@@ -31,6 +31,9 @@ func LuogongByTime(qike Gongwei, date time.Time, dizhi calendar.Dizhi) Gongwei {
 
 func LuogongByCount(qike Gongwei, count int) Gongwei {
 	luogon := (int(qike) + count - 1) % 6
+	if luogon == 0 {
+		luogon = 6
+	}
 
 	return Gongwei(luogon)
 }

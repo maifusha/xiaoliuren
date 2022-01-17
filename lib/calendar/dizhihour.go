@@ -58,7 +58,7 @@ func NowDizhi() Dizhi {
 	now := time.Now().Format("15:04")
 
 	for k, v := range DizhiHours {
-		period := strings.Split(v[1], "-")
+		period := strings.Split(v[1], "~")
 		if strings.Compare(now, period[0]) >= 0 && strings.Compare(now, period[1]) < 0 {
 			return k
 		}

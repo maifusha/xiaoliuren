@@ -44,10 +44,10 @@ func init() {
 
 func main() {
 	router.GET("/home/index", func(c *gin.Context) {
-		svc := service.NewXiaoliuren()
+		xlr := service.NewXiaoliuren()
 
 		c.HTML(http.StatusOK, "home/index.tpl", gin.H{
-			"qikeList":  svc.LiushenList(),
+			"qikeList":  xlr.LiushenList(),
 			"dizhiList": calendar.DizhiHours,
 		})
 	})
@@ -59,26 +59,31 @@ func main() {
 			return
 		}
 
-		svc := service.NewXiaoliuren()
-		yuePan, riPan, shiPan := svc.GetSanPan(req.Qike, req.Date, req.Dizhi)
+		xlr := service.NewXiaoliuren()
+		yueke, rike, shike := xlr.GetSanGong(req.Qike, req.Date, req.Dizhi)
+
+		lunar := calendar.NewLunarBySolar(req.Date)
 
 		c.JSON(http.StatusOK, gin.H{
-			"lunar_time": svc.GetLunarTime(req.Date, req.Dizhi),
-			"solar_time": svc.GetSolarTime(req.Date, req.Dizhi),
-			"sanpan": gin.H{
-				"yue_pan": yuePan,
-				"ri_pan":  riPan,
-				"shi_pan": shiPan,
+			"qike":         req.Qike,
+			"finger_count": lunar.MonthInt() + lunar.DayInt() + int(req.Dizhi) - 2,
+			"lunar_time":   xlr.GetLunarTime(req.Date, req.Dizhi),
+			"solar_time":   xlr.GetSolarTime(req.Date, req.Dizhi),
+			"sangong": gin.H{
+				"yueke": yueke,
+				"rike":  rike,
+				"shike": shike,
 			},
 		})
 	})
 
 	router.GET("/home/dianbo", func(c *gin.Context) {
 		date := time.Now()
+		lunar := calendar.NewLunarBySolar(date)
 		dizhi := calendar.NowDizhi()
 		gongwei := liushen.LuogongByTime(liushen.DAAN, date, dizhi)
 
-		svc := service.NewXiaoliuren()
+		xlr := service.NewXiaoliuren()
 		var shengong *model.Liushen
 		var jiehuoList []model.Jiehuo
 		var duanciList []model.Duanci
@@ -88,27 +93,29 @@ func main() {
 
 		go func() {
 			defer wg.Done()
-			shengong = svc.GetShengong(gongwei)
+			shengong = xlr.GetShengong(gongwei)
 		}()
 
 		go func() {
 			defer wg.Done()
-			jiehuoList = svc.JiehuoList(gongwei)
+			jiehuoList = xlr.JiehuoList(gongwei)
 		}()
 
 		go func() {
 			defer wg.Done()
-			duanciList = svc.DuanciList(gongwei)
+			duanciList = xlr.DuanciList(gongwei)
 		}()
 
 		wg.Wait()
 
 		c.JSON(http.StatusOK, gin.H{
-			"lunar_time":  svc.GetLunarTime(date, dizhi),
-			"solar_time":  svc.GetSolarTime(date, dizhi),
-			"shengong":    shengong,
-			"jiehuo_list": jiehuoList,
-			"duanci_list": duanciList,
+			"qike":         liushen.DAAN,
+			"finger_count": lunar.MonthInt() + lunar.DayInt() + int(dizhi) - 2,
+			"lunar_time":   xlr.GetLunarTime(date, dizhi),
+			"solar_time":   xlr.GetSolarTime(date, dizhi),
+			"shengong":     shengong,
+			"jiehuo_list":  jiehuoList,
+			"duanci_list":  duanciList,
 		})
 	})
 
@@ -119,16 +126,20 @@ func main() {
 			return
 		}
 
-		svc := service.NewXiaoliuren()
-		daanList, liulianList, suxiList, chikouList, xiaojiList, kongwangList := svc.JudgeHoursForDate(req.Qike, req.Date)
+		xlr := service.NewXiaoliuren()
+		daanList, liulianList, suxiList, chikouList, xiaojiList, kongwangList := xlr.JudgeHoursForDate(req.Qike, req.Date)
 
 		c.JSON(http.StatusOK, gin.H{
-			"daan":     daanList,
-			"lulian":   liulianList,
-			"suxi":     suxiList,
-			"chikou":   chikouList,
-			"xiaoji":   xiaojiList,
-			"kongwang": kongwangList,
+			"solar": req.Date.Format("2006-01-02"),
+			"lunar": calendar.NewLunarBySolar(req.Date).String(),
+			"liushen": gin.H{
+				"daan":     daanList,
+				"liulian":  liulianList,
+				"suxi":     suxiList,
+				"chikou":   chikouList,
+				"xiaoji":   xiaojiList,
+				"kongwang": kongwangList,
+			},
 		})
 	})
 

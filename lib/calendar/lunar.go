@@ -2,6 +2,7 @@ package calendar
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 
@@ -22,11 +23,9 @@ type lunar struct {
 }
 
 func NewLunarBySolar(solar time.Time) *lunar {
-	year := ""
-	month := ""
-	day := ""
 	lunarStr := thirdlunar.Lunar(solar.Format("20060102"))
-	fmt.Scanf(lunarStr, "%s年%s月%s", &year, &month, &day)
+	result := regexp.MustCompile(`(?P<year>.*)年(?P<month>.*)月(?P<day>.*)`).FindAllStringSubmatch(lunarStr, -1)
+	year, month, day := result[0][1], result[0][2], result[0][3]
 
 	return &lunar{
 		Year:  string([]rune(year)[0:2]) + "年",

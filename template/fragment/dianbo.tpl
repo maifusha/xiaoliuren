@@ -1,22 +1,22 @@
 {{define "fragment/dianbo"}}
 <div class="row page-header">
     <div class="col-sm-5">
-        <blockquote>临时起意，即刻起卦，指点迷津。</blockquote>
+        <blockquote><span class="glyphicon glyphicon-heart" aria-hidden="true"></span> 临时起意，即刻起卦，指点迷津。</blockquote>
     </div>
     <div class="col-sm-4 col-sm-offset-2">
-        <button type="button" class="btn btn-warning btn-block center-block">
+        <button type="button" class="btn btn-warning btn-block center-block qigua">
             <div class="row"><div class="col-sm-6">起</div><div class="col-sm-6">卦</div></div>
         </button>
     </div>
 </div>
 
-<div class="panel panel-info">
+<div class="panel panel-info jieke hidden">
     <div class="panel-heading">
         <h3 class="panel-title">
-            <span class="h4">解 课 > </span>
+            <span class="h4">解 课</span> <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
 
-            <span style="margin-left: 15px;font-weight: 400;">甲子年正月初二子时</span>
-            <small>（<span>2011-01-01 13:22</span>）</small>
+            <span class="lunar_time" style="margin-left: 15px;font-weight: 400;"></span>
+            <small>（<span class="solar_time"></span>）</small>
         </h3>
     </div>
     <div class="panel-body">
@@ -24,47 +24,97 @@
             <tr class="row">
                 <td class="active text-center col-sm-2" style="vertical-align: middle;"><strong>落宫</strong></td>
                 <td class="col-sm-4">
-                    <h4 style="display: inline-block;margin: 0;"><span class="label label-danger">大安 <small style="color: white;">大吉</small></span></h4>
-                    <span>xxxxxxxxxxxxx</span>
+                    <h4><span class="label luogong_label"><b></b> <small style="color: white;"></small></span></h4>
+                    <span class="luogong_shiyi"></span>
                 </td>
                 <td class="active text-center col-sm-2" style="vertical-align: middle;"><strong>机缘数</strong></td>
-                <td class="col-sm-4">排位数 <mark>1+6n</mark>，宫位数 <mark>3、5</mark></td>
+                <td class="col-sm-4">
+                    <p>排位数 <mark class="paiweishu"></mark></p>
+                    <p>宫位数 <mark class="gongweishu"></mark></p>
+                </td>
             </tr>
             <tr class="row">
                 <td class="active text-center col-sm-2" style="vertical-align: middle;"><strong>贵人冲犯</strong></td>
-                <td class="col-sm-4">贵人西南，冲犯东方</td>
+                <td class="col-sm-4 guirenchongfan"></td>
                 <td class="active text-center col-sm-2" style="vertical-align: middle;"><strong>机缘方位</strong></td>
-                <td class="col-sm-4">位在东方</td>
+                <td class="col-sm-4 jiyuanfangwei"></td>
+            </tr>
+            <tr class="row">
+                <td class="active text-center col-sm-2" style="vertical-align: middle;"><strong>五行/神煞</strong></td>
+                <td class="col-sm-4"><span class="wuxin"></span> / <span class="shensha"></span></td>
+                <td class="active text-center col-sm-2" style="vertical-align: middle;"><strong>八卦</strong></td>
+                <td class="col-sm-4 bagua"></td>
+            </tr>
         </table>
 
         <div class="row" style="margin: 0;">
             <div class="col-sm-6">
-                <strong>解惑</strong>
-                <table class="table table-bordered table-hover">
-                    <tr class="row">
-                        <td class="active text-center col-sm-3" style="vertical-align: middle;"><strong>问运势</strong></td>
-                        <td class="col-sm-9">xxxx</td>
-                    </tr>
+                <strong><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 解惑</strong>
+                <table class="table table-bordered table-hover jiehuo_list">
                 </table>
             </div>
             <div class="col-sm-6">
-                <strong>断辞</strong>
-                <table class="table table-bordered table-striped table-hover">
-                    <tr class="row">
-                        <td class="col-sm-3">xxxxxxx，</td>
-                        <td class="col-sm-3">xxxxxxx，</td>
-                        <td class="col-sm-3">xxxxxxx，</td>
-                        <td class="col-sm-3">xxxxxxx，</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col-sm-3">xxxxxxx，</td>
-                        <td class="col-sm-3">xxxxxxx，</td>
-                        <td class="col-sm-3">xxxxxxx，</td>
-                        <td class="col-sm-3">xxxxxxx，</td>
-                    </tr>
+                <strong><span class="glyphicon glyphicon-th" aria-hidden="true"></span> 断辞</strong>
+                <table class="table table-bordered table-striped table-hover duanci_list">
                 </table>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+$(function () {
+    $("#dianbo").delegate(".qigua", "click", function (){
+        xiaoliuren.checkLiushen(1);
+        xiaoliuren.loading();
+        $("#dianbo .jieke").addClass("hidden");
+
+        $.ajax({
+            type: "GET",
+            url: "/home/dianbo",
+            dataType: "json"
+        }).then(function (resp) {
+            return xiaoliuren.fingerCount(resp.finger_count, resp)
+        }).then(function (resp){
+            $("#dianbo .lunar_time").text(resp.lunar_time);
+            $("#dianbo .solar_time").text(resp.solar_time);
+
+            var jixiang = /吉/;
+            if (jixiang.test(resp.shengong.jixiong)) {
+                $(".luogong_label").removeClass("label-success").addClass("label-danger");
+            } else {
+                $(".luogong_label").removeClass("label-danger").addClass("label-success");
+            }
+            $(".luogong_label b").text(resp.shengong.name);
+            $(".luogong_label small").text(resp.shengong.jixiong);
+            $(".luogong_shiyi").text(resp.shengong.shiyi);
+            $(".guirenchongfan").text(resp.shengong.guirenchongfan);
+            $(".paiweishu").text(resp.shengong.paiweishu);
+            $(".gongweishu").text(resp.shengong.gongweishu);
+            $(".jiyuanfangwei").text(resp.shengong.fangwei);
+            $(".wuxin").text(resp.shengong.wuxin);
+            $(".shensha").text(resp.shengong.shensha);
+            $(".bagua").text(resp.shengong.bagua);
+
+            $(".jiehuo_list").empty();
+            resp.jiehuo_list.forEach(function(jiehuo){
+                var tpl = '<tr class="row"><td class="active text-center col-sm-3" style="vertical-align: middle;"><strong>{type}</strong></td><td class="col-sm-9">{sentence}</td></tr>';
+                var row = tpl.replace("{type}","问"+jiehuo.type).replace("{sentence}",jiehuo.sentence);
+                $(".jiehuo_list").append(row);
+            });
+
+            $(".duanci_list").empty();
+            for (var i = 0; i < resp.duanci_list.length; i+=4) {
+                var row = [];
+                resp.duanci_list.slice(i,i+4).forEach(function(one){
+                    row.push('<td class="col-sm-3">'+one.sentence+'</td>');
+                })
+                $(".duanci_list").append('<tr class="row">'+row.join('')+'</tr>')
+            }
+
+            xiaoliuren.loaded();
+            $("#dianbo .jieke").removeClass("hidden");
+        });
+    });
+});
+</script>
 {{end}}
