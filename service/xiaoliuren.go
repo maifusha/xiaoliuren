@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"sort"
 	"sync"
 	"time"
 
@@ -37,7 +38,7 @@ func (x *xiaoliuren) LiushenList() []model.Liushen {
 	return qikeList
 }
 
-func (x *xiaoliuren) GetSanPan(qike liushen.Gongwei, date time.Time, dizhi calendar.Dizhi) (yuePan *liushen.Jieke, riPan *liushen.Jieke, shiPan *liushen.Jieke) {
+func (x *xiaoliuren) GetSanGong(qike liushen.Gongwei, date time.Time, dizhi calendar.Dizhi) (yueke *liushen.Jieke, rike *liushen.Jieke, shike *liushen.Jieke) {
 	lunar := calendar.NewLunarBySolar(date)
 	dizhiHour := calendar.NewDizhiHour(dizhi)
 
@@ -50,17 +51,17 @@ func (x *xiaoliuren) GetSanPan(qike liushen.Gongwei, date time.Time, dizhi calen
 
 	go func() {
 		defer wg.Done()
-		yuePan = x.JieKe(qike, month)
+		yueke = x.JieKe(qike, month)
 	}()
 
 	go func() {
 		defer wg.Done()
-		riPan = x.JieKe(qike, month+day-1)
+		rike = x.JieKe(qike, month+day-1)
 	}()
 
 	go func() {
 		defer wg.Done()
-		shiPan = x.JieKe(qike, month+day+hour-2)
+		shike = x.JieKe(qike, month+day+hour-2)
 	}()
 
 	wg.Wait()
@@ -71,7 +72,7 @@ func (x *xiaoliuren) JieKe(qike liushen.Gongwei, count int) *liushen.Jieke {
 	gongwei := liushen.LuogongByCount(qike, count)
 	model := repository.NewLiushen().FindById(int(gongwei))
 
-	return liushen.NewJieke(gongwei, model.Name, model.Shiyi)
+	return liushen.NewJieke(gongwei, model.Name, model.Jixiong, model.Shiyi)
 }
 
 func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) *model.Liushen {
@@ -94,19 +95,28 @@ func (x *xiaoliuren) DuanciList(gongwei liushen.Gongwei) []model.Duanci {
 
 func (x *xiaoliuren) JudgeHoursForDate(qike liushen.Gongwei, date time.Time) (
 	daanList []interface{},
-	suxiList []interface{},
-	xiaojiList []interface{},
 	liulianList []interface{},
+	suxiList []interface{},
 	chikouList []interface{},
+	xiaojiList []interface{},
 	kongwangList []interface{},
 ) {
-	for k, v := range calendar.DizhiHours {
+	var dizhis []calendar.Dizhi
+	for k := range calendar.DizhiHours {
+		dizhis = append(dizhis, k)
+	}
+	sort.Slice(dizhis, func(i, j int) bool {
+		return dizhis[i] < dizhis[j]
+	})
+
+	for _, dizhi := range dizhis {
+		dizhiHour := calendar.DizhiHours[dizhi]
 		item := struct {
 			DizhiName string `json:"dizhi_name"`
 			SolarTime string `json:"solar_time"`
-		}{v[0], fmt.Sprintf("%s %s", date.Format("2006-01-02"), v[1])}
+		}{dizhiHour[0], fmt.Sprintf("%s %s", date.Format("2006-01-02"), dizhiHour[1])}
 
-		switch liushen.LuogongByTime(qike, date, k) {
+		switch liushen.LuogongByTime(qike, date, dizhi) {
 		case liushen.DAAN:
 			daanList = append(daanList, item)
 		case liushen.LIULIAN:
