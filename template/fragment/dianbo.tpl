@@ -64,8 +64,8 @@
 <script type="text/javascript">
 $(function () {
     $("#dianbo").delegate(".qigua", "click", function (){
-        xiaoliuren.checkLiushen(1);
-        xiaoliuren.loading();
+        zhangjue.checkLiushen(1);
+        zhangjue.loading();
         $("#dianbo .jieke").addClass("hidden");
 
         $.ajax({
@@ -73,7 +73,7 @@ $(function () {
             url: "/home/dianbo",
             dataType: "json"
         }).then(function (resp) {
-            return xiaoliuren.fingerCount(resp.finger_count, resp)
+            return zhangjue.fingerCount(resp.finger_count, resp)
         }).then(function (resp){
             $("#dianbo .lunar_time").text(resp.lunar_time);
             $("#dianbo .solar_time").text(resp.solar_time);
@@ -111,7 +111,7 @@ $(function () {
                 $(".duanci_list").append('<tr class="row">'+row.join('')+'</tr>')
             }
 
-            xiaoliuren.loaded();
+            zhangjue.loaded();
             $("#dianbo .jieke").removeClass("hidden");
         });
     });

@@ -93,7 +93,7 @@
 $(function () {
     $("#jixiong").delegate(".qike_list input", "change", function () {
         var qike = $("#jixiong .qike:checked").val();
-        xiaoliuren.checkLiushen(qike);
+        zhangjue.checkLiushen(qike);
     });
 
     $("#jixiong").delegate(".qigua", "click", function (){
@@ -106,8 +106,8 @@ $(function () {
         var dizhi = $("#jixiong .dizhi:checked").val();
         if (!dizhi) {return alert("请选择时辰");}
 
-        xiaoliuren.checkLiushen(qike);
-        xiaoliuren.loading();
+        zhangjue.checkLiushen(qike);
+        zhangjue.loading();
         $("#jixiong .jieke").addClass("hidden");
 
         $.ajax({
@@ -120,7 +120,7 @@ $(function () {
             },
             dataType: "json",
         }).then(function (resp) {
-            return xiaoliuren.fingerCount(resp.finger_count, resp)
+            return zhangjue.fingerCount(resp.finger_count, resp)
         }).then(function(resp){
             $("#jixiong .lunar_time").text(resp.lunar_time);
             $("#jixiong .solar_time").text(resp.solar_time);
@@ -156,7 +156,7 @@ $(function () {
                 $(".shike .liushen_label").removeClass("label-danger").addClass("label-success");
             }
 
-            xiaoliuren.loaded();
+            zhangjue.loaded();
             $("#jixiong .jieke").removeClass("hidden");
         });
     });

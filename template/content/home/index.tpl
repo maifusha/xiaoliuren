@@ -3,7 +3,7 @@
     <div class="row" style="margin-top: 30px;">
         <div class="col-sm-3 text-center">
             <h4>无事勿卦，卦后不复，心意相诚</h4>
-            <small>道传小六壬</small>
+            <small>道门小六壬</small>
             <div style="position: relative;">
                 <img src="/static/image/zhangjue.jpg" class="img-responsive img-rounded center-block" alt="Responsive image"
                      style="margin-top: 50px;">
@@ -29,7 +29,7 @@
 </div>
 <script type="text/javascript">
 $(function () {
-    window.xiaoliuren = new Object({
+    window.zhangjue = new Object({
         currentLiushen: null,
         position: {
             1: {top:"60%",left:"39%"},
@@ -87,10 +87,10 @@ $(function () {
         }
     });
 
-    xiaoliuren.checkLiushen(1);
+    zhangjue.checkLiushen(1);
 
     $(document).delegate('a[data-toggle="tab"]', "shown.bs.tab", function () {
-        xiaoliuren.checkLiushen(1);
+        zhangjue.checkLiushen(1);
     });
 });
 </script>
