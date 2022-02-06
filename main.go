@@ -42,6 +42,10 @@ func init() {
 }
 
 func main() {
+	router.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/home/index")
+	})
+
 	router.GET("/home/index", func(c *gin.Context) {
 		xlr := service.NewXiaoliuren()
 
