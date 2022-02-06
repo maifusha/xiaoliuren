@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"sync"
 	"time"
 
@@ -30,12 +31,10 @@ var staticFS embed.FS
 
 func init() {
 	if gin.Mode() == gin.ReleaseMode {
-		//必须在router初始化前配置才有效
-		gin.DefaultWriter, _ = os.Create(os.Getenv("GOPATH") + config.RUNTIME_LOG)
-		gin.DefaultErrorWriter, _ = os.Create(os.Getenv("GOPATH") + config.ERROR_LOG)
+		gin.DefaultWriter, _ = os.Create(path.Join(os.Getenv("GOPATH"), config.RUNTIME_LOG))
+		gin.DefaultErrorWriter, _ = os.Create(path.Join(os.Getenv("GOPATH"), config.ERROR_LOG))
 	}
 
-	//从嵌入式文件系统加载模板和静态资源
 	router = gin.Default()
 	router.HTMLRender = templatekit.New(&templateFS).MultiRender()
 	subStatic, _ := fs.Sub(staticFS, "static")

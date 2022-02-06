@@ -2,6 +2,7 @@ package repository
 
 import (
 	"log"
+	"time"
 
 	"xiaoliuren/config"
 
@@ -20,4 +21,9 @@ func init() {
 	} else {
 		Db = db
 	}
+
+	sqlDB, _ := Db.DB()
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetMaxOpenConns(100)
+	sqlDB.SetConnMaxLifetime(time.Hour)
 }
