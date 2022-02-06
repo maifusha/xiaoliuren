@@ -22,7 +22,7 @@ clean:
 	@if [ -f ${APP} ] ; then rm -rf ${APP} ; fi
 
 image:
-	docker login -u maifusha
+	cat password.docker | docker login --username maifusha --password-stdin
 	docker build -t maifusha/xiaoliuren -f docker/Dockerfile .
 	docker push maifusha/xiaoliuren
 
