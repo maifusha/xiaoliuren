@@ -3,7 +3,7 @@
 #### Quick Start
 ```bash
 docker run -d --rm -p 8000:8000 maifusha/xiaoliuren
-curl -L localhost:8000/
+curl -L localhost:8000
 ```
 
 #### Screen Shots
