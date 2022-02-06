@@ -7,8 +7,9 @@ curl -L localhost:8000
 ```
 
 #### Screen Shots
-![file](screenshots/jixiong.png)
-![file](screenshots/dianbo.png)
-![file](screenshots/zeshi.png)
+![file](screenshots/qiazhi.jpg)
+![file](screenshots/jixiong.jpg)
+![file](screenshots/dianbo.jpg)
+![file](screenshots/zeshi.jpg)
 
 #### About Xiaoliuren
