@@ -22,7 +22,7 @@ clean:
 	@if [ -f ${APP} ] ; then rm -rf ${APP} ; fi
 
 image:
-	docker login -u maifusha hub.docker.com
+	docker login -u maifusha
 	docker build -t maifusha/xiaoliuren -f docker/Dockerfile .
 	docker push maifusha/xiaoliuren
 
