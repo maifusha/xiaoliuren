@@ -2,4 +2,4 @@
 /tmp
 
 .DS_Store
-password.docker
+credential.docker
