@@ -25,7 +25,7 @@ COPY --from=builder /go/src/xiaoliuren /svc/xiaoliuren
 COPY sqlite.db /svc/sqlite.db
 WORKDIR /svc
 
-ENV GOPATH=/var/www
+ENV GOPATH=/svc
 VOLUME $GOPATH/log
 
 EXPOSE 8000
@@ -37,4 +37,4 @@ ENTRYPOINT ["./entrypoint.sh"]
 CMD ["./xiaoliuren"]
 
 HEALTHCHECK --interval=5s --timeout=3s \
-  CMD curl --fail http://localhost/ || exit 1
+  CMD curl --fail http://localhost:8000/home/index || exit 1

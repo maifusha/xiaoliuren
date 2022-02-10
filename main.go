@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
@@ -10,13 +11,15 @@ import (
 	"sync"
 	"time"
 
-	"xiaoliuren/config"
-	"xiaoliuren/lib/calendar"
-	"xiaoliuren/lib/liushen"
-	"xiaoliuren/lib/templatekit"
-	"xiaoliuren/model"
-	"xiaoliuren/request"
-	"xiaoliuren/service"
+	"xiaoliuren/internal/config"
+	"xiaoliuren/internal/filter"
+	"xiaoliuren/internal/model"
+	"xiaoliuren/internal/request"
+	"xiaoliuren/internal/service"
+	"xiaoliuren/internal/util"
+	"xiaoliuren/pkg/calendar"
+	"xiaoliuren/pkg/liushen"
+	"xiaoliuren/pkg/templatekit"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +33,8 @@ var templateFS embed.FS
 var staticFS embed.FS
 
 func init() {
+	gin.SetMode(config.GIN_MODE)
+
 	if gin.Mode() == gin.ReleaseMode {
 		gin.DefaultWriter, _ = os.Create(path.Join(os.Getenv("GOPATH"), config.RUNTIME_LOG))
 		gin.DefaultErrorWriter, _ = os.Create(path.Join(os.Getenv("GOPATH"), config.ERROR_LOG))
@@ -42,8 +47,10 @@ func init() {
 }
 
 func main() {
+	log.Println("Application start:" + util.NewNow().String())
+
 	router.GET("/", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/home/index")
+		c.Redirect(http.StatusFound, "/home/index")
 	})
 
 	router.GET("/home/index", func(c *gin.Context) {
@@ -101,12 +108,16 @@ func main() {
 
 		go func() {
 			defer wg.Done()
-			jiehuoList = xlr.JiehuoList(gongwei)
+			f := filter.NewJiehuo()
+			f.LiushenId = uint(gongwei)
+			jiehuoList = xlr.JiehuoList(f)
 		}()
 
 		go func() {
 			defer wg.Done()
-			duanciList = xlr.DuanciList(gongwei)
+			f := filter.NewDuanci()
+			f.LiushenId = uint(gongwei)
+			duanciList = xlr.DuanciList(f)
 		}()
 
 		wg.Wait()
@@ -146,5 +157,15 @@ func main() {
 		})
 	})
 
-	log.Fatal(router.Run(config.HOST + ":" + config.PORT))
+	srv := &http.Server{
+		Addr:    fmt.Sprintf("%s:%s", config.HOST, config.PORT),
+		Handler: router,
+	}
+
+	go util.NewGrace(srv).Down()
+
+	if err := srv.ListenAndServe(); err != nil {
+		log.Println("Server exited：" + err.Error())
+	}
+	log.Println("Application down：" + util.NewNow().String())
 }

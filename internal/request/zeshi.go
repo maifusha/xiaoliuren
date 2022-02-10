@@ -3,7 +3,7 @@ package request
 import (
 	"time"
 
-	"xiaoliuren/lib/liushen"
+	"xiaoliuren/pkg/liushen"
 )
 
 type Zeshi struct {

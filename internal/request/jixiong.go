@@ -3,8 +3,8 @@ package request
 import (
 	"time"
 
-	"xiaoliuren/lib/calendar"
-	"xiaoliuren/lib/liushen"
+	"xiaoliuren/pkg/calendar"
+	"xiaoliuren/pkg/liushen"
 )
 
 type Jixiong struct {

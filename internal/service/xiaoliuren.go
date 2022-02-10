@@ -6,10 +6,11 @@ import (
 	"sync"
 	"time"
 
-	"xiaoliuren/lib/calendar"
-	"xiaoliuren/lib/liushen"
-	"xiaoliuren/model"
-	"xiaoliuren/repository"
+	"xiaoliuren/internal/filter"
+	"xiaoliuren/internal/model"
+	"xiaoliuren/internal/repository"
+	"xiaoliuren/pkg/calendar"
+	"xiaoliuren/pkg/liushen"
 )
 
 type xiaoliuren struct {
@@ -33,7 +34,7 @@ func (x *xiaoliuren) GetSolarTime(date time.Time, dizhi calendar.Dizhi) string {
 }
 
 func (x *xiaoliuren) LiushenList() []model.Liushen {
-	qikeList := repository.NewLiushen().FindAll()
+	qikeList, _ := repository.NewLiushen().FindAll()
 
 	return qikeList
 }
@@ -70,25 +71,25 @@ func (x *xiaoliuren) GetSanGong(qike liushen.Gongwei, date time.Time, dizhi cale
 
 func (x *xiaoliuren) JieKe(qike liushen.Gongwei, count int) *liushen.Jieke {
 	gongwei := liushen.LuogongByCount(qike, count)
-	model := repository.NewLiushen().FindById(int(gongwei))
+	model, _ := repository.NewLiushen().FindById(int(gongwei))
 
 	return liushen.NewJieke(gongwei, model.Name, model.Jixiong, model.Shiyi)
 }
 
 func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) *model.Liushen {
-	shengong := repository.NewLiushen().FindById(int(gongwei))
+	shengong, _ := repository.NewLiushen().FindById(int(gongwei))
 
 	return shengong
 }
 
-func (x *xiaoliuren) JiehuoList(gongwei liushen.Gongwei) []model.Jiehuo {
-	jiehuoList := repository.NewJiehuo().FingByGongwei(gongwei)
+func (x *xiaoliuren) JiehuoList(f *filter.Jiehuo) []model.Jiehuo {
+	jiehuoList := repository.NewJiehuo().Find(f)
 
 	return jiehuoList
 }
 
-func (x *xiaoliuren) DuanciList(gongwei liushen.Gongwei) []model.Duanci {
-	duanciList := repository.NewDuanci().FindByGongwei(gongwei)
+func (x *xiaoliuren) DuanciList(f *filter.Duanci) []model.Duanci {
+	duanciList := repository.NewDuanci().Find(f)
 
 	return duanciList
 }

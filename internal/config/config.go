@@ -1,6 +1,7 @@
 package config
 
 const (
+	GIN_MODE    = "debug"
 	HOST        = ""
 	PORT        = "8000"
 	DBPATH      = "./sqlite.db"

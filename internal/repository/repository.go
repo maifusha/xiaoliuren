@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"xiaoliuren/config"
+	"xiaoliuren/internal/config"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

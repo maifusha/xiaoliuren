@@ -1,4 +1,4 @@
-.PHONY: default build run gotool clean image container
+.PHONY: default build run gotool image container clean
 APP=xiaoliuren
 
 default: build run
@@ -11,11 +11,8 @@ run:
 
 gotool:
 	go mod tidy
-	go fmt ./
-	go vet ./
-
-clean:
-	@if [ -f ${APP} ] ; then rm -rf ${APP} ; fi
+	go vet ./...
+	go fmt ./...
 
 image:
 	docker login --username $$(head -n 1 credential.docker) --password $$(tail -n 1 credential.docker)
@@ -27,3 +24,7 @@ image:
 
 container:
 	docker run -d --rm -p 8000:8000 maifusha/xiaoliuren:latest
+
+clean:
+	go clean -i -x
+	docker ps -qf ancestor=maifusha/xiaoliuren | xargs docker rm -fv
