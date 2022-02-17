@@ -13,7 +13,7 @@ import (
 var Db *gorm.DB
 
 func init() {
-	ds := sqlite.Open(config.DBPATH)
+	ds := sqlite.Open(config.Conf.Sqlite3.Path)
 	db, err := gorm.Open(ds, &gorm.Config{})
 
 	if err != nil {

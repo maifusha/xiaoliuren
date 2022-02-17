@@ -23,6 +23,7 @@ RUN apk add --no-cache tzdata && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/l
 
 COPY --from=builder /go/src/xiaoliuren /svc/xiaoliuren
 COPY sqlite.db /svc/sqlite.db
+COPY config.yaml /svc/config.yaml
 WORKDIR /svc
 
 ENV GOPATH=/svc

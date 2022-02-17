@@ -16,9 +16,8 @@ func (l *Liushen) FindById(id int) (*model.Liushen, error) {
 	return l.model, result.Error
 }
 
-func (l *Liushen) FindAll() (models []model.Liushen, cnt int64) {
-	result := Db.Find(&models)
-	cnt = result.RowsAffected
+func (l *Liushen) FindAll() (models []model.Liushen) {
+	Db.Find(&models)
 
 	return
 }

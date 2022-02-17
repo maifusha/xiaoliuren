@@ -34,7 +34,7 @@ func (x *xiaoliuren) GetSolarTime(date time.Time, dizhi calendar.Dizhi) string {
 }
 
 func (x *xiaoliuren) LiushenList() []model.Liushen {
-	qikeList, _ := repository.NewLiushen().FindAll()
+	qikeList := repository.NewLiushen().FindAll()
 
 	return qikeList
 }
