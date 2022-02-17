@@ -10,6 +10,7 @@ import (
 	"path"
 	"sync"
 	"time"
+	"xiaoliuren/pkg/grace"
 
 	"xiaoliuren/internal/config"
 	"xiaoliuren/internal/filter"
@@ -162,7 +163,7 @@ func main() {
 		Handler: router,
 	}
 
-	go util.NewGrace(srv).Down()
+	go grace.New(srv).Down()
 
 	if err := srv.ListenAndServe(); err != nil {
 		log.Println("Server exited：" + err.Error())

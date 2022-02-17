@@ -1,4 +1,4 @@
-package util
+package grace
 
 import (
 	"context"
@@ -14,7 +14,7 @@ type grace struct {
 	quit chan os.Signal
 }
 
-func NewGrace(server *http.Server) *grace {
+func New(server *http.Server) *grace {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 

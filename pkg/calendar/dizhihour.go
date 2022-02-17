@@ -2,8 +2,7 @@ package calendar
 
 import (
 	"strings"
-
-	"xiaoliuren/internal/util"
+	"time"
 )
 
 type Dizhi int
@@ -56,7 +55,7 @@ func (d *DizhiHour) Period() string {
 }
 
 func NowDizhi() Dizhi {
-	now := util.NewNow().Fmt("15:04").String()
+	now := time.Now().Format("15:04")
 
 	for k, v := range DizhiHours {
 		period := strings.Split(v[1], "~")

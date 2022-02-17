@@ -19,7 +19,7 @@ func (q *Jiehuo) Find(f *filter.Jiehuo) (models []model.Jiehuo) {
 	query := Db.Session(&gorm.Session{})
 
 	if f.LiushenId != 0 {
-		query.Where("liushen_id=?", f.LiushenId)
+		query = query.Where("liushen_id=?", f.LiushenId)
 	}
 
 	query.Find(&models)

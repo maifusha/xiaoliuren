@@ -19,7 +19,7 @@ func (d *Duanci) Find(f *filter.Duanci) (models []model.Duanci) {
 	query := Db.Session(&gorm.Session{})
 
 	if f.LiushenId != 0 {
-		query.Where("liushen_id=?", f.LiushenId)
+		query = query.Where("liushen_id=?", f.LiushenId)
 	}
 
 	query.Find(&models)
