@@ -5,6 +5,7 @@ import (
 	"sort"
 	"sync"
 	"time"
+	"xiaoliuren/internal/util/logger"
 
 	"xiaoliuren/internal/filter"
 	"xiaoliuren/internal/model"
@@ -71,13 +72,19 @@ func (x *xiaoliuren) GetSanGong(qike liushen.Gongwei, date time.Time, dizhi cale
 
 func (x *xiaoliuren) JieKe(qike liushen.Gongwei, count int) *liushen.Jieke {
 	gongwei := liushen.LuogongByCount(qike, count)
-	model, _ := repository.NewLiushen().FindById(int(gongwei))
+	model, err := repository.NewLiushen().FindById(int(gongwei))
+	if err != nil {
+		logger.Fatalln(err)
+	}
 
 	return liushen.NewJieke(gongwei, model.Name, model.Jixiong, model.Shiyi)
 }
 
 func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) *model.Liushen {
-	shengong, _ := repository.NewLiushen().FindById(int(gongwei))
+	shengong, err := repository.NewLiushen().FindById(int(gongwei))
+	if err != nil {
+		logger.Fatalln(err)
+	}
 
 	return shengong
 }

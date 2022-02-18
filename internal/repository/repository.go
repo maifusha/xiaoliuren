@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"log"
 	"time"
 
 	"xiaoliuren/internal/config"
+	"xiaoliuren/internal/util/logger"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -15,15 +15,17 @@ var Db *gorm.DB
 func init() {
 	ds := sqlite.Open(config.Conf.Sqlite3.Path)
 	db, err := gorm.Open(ds, &gorm.Config{})
-
 	if err != nil {
-		log.Fatal(err)
-	} else {
-		Db = db
+		logger.Fatalln(err)
 	}
 
-	sqlDB, _ := Db.DB()
+	sqlDB, err := db.DB()
+	if err != nil {
+		logger.Fatalln(err)
+	}
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Hour)
+
+	Db = db
 }

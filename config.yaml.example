@@ -4,7 +4,7 @@ server:
   port: 8000
 sqlite3:
   path: ./sqlite.db
-log:
+logfile:
   runtime: log/runtime.log
   request: log/request.log
   panic: log/panic.log

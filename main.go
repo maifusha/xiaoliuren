@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"path"
@@ -11,6 +10,8 @@ import (
 	"xiaoliuren/internal/config"
 	"xiaoliuren/internal/router"
 	"xiaoliuren/internal/util"
+	"xiaoliuren/internal/util/file"
+	"xiaoliuren/internal/util/logger"
 	"xiaoliuren/pkg/grace"
 
 	"github.com/gin-gonic/gin"
@@ -26,13 +27,13 @@ func init() {
 	gin.SetMode(config.Conf.Mode)
 
 	if gin.Mode() == gin.ReleaseMode {
-		gin.DefaultWriter, _ = os.Create(path.Join(os.Getenv("GOPATH"), config.Conf.Log.Request))
-		gin.DefaultErrorWriter, _ = os.Create(path.Join(os.Getenv("GOPATH"), config.Conf.Log.Panic))
+		gin.DefaultWriter = file.MustOpen(path.Join(os.Getenv("GOPATH"), config.Conf.Logfile.Request))
+		gin.DefaultErrorWriter = file.MustOpen(path.Join(os.Getenv("GOPATH"), config.Conf.Logfile.Panic))
 	}
 }
 
 func main() {
-	log.Println("Application start:" + util.NewNow().String())
+	logger.Printf("Application start: %s\n", util.NewNow())
 
 	handler := router.New(gin.Default()).SetRenderWithEmbed(&templateFS)
 	srv := &http.Server{
@@ -43,7 +44,7 @@ func main() {
 	go grace.New(srv).Down()
 
 	if err := srv.ListenAndServe(); err != nil {
-		log.Println("Server exited：" + err.Error())
+		logger.Printf("Server error: %s\n", err)
 	}
-	log.Println("Application down：" + util.NewNow().String())
+	logger.Printf("Application down: %s\n", util.NewNow())
 }

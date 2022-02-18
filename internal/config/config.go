@@ -16,7 +16,7 @@ type Config struct {
 
 	Server
 	Sqlite3
-	Log
+	Logfile
 }
 
 func NewConfig() *Config {
@@ -32,7 +32,7 @@ type Sqlite3 struct {
 	Path string
 }
 
-type Log struct {
+type Logfile struct {
 	Runtime string
 	Request string
 	Panic   string

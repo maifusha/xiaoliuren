@@ -28,6 +28,6 @@ func (g *grace) Down() {
 	defer cancel()
 
 	if err := g.srv.Shutdown(ctx); err != nil {
-		log.Println("Server shutdown：", err)
+		log.Printf("Server grace shutdown error: %s\n", err)
 	}
 }

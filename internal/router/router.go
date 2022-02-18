@@ -4,6 +4,7 @@ import (
 	"embed"
 	"io/fs"
 	"net/http"
+	"xiaoliuren/internal/util/logger"
 
 	"xiaoliuren/internal/router/handler"
 	"xiaoliuren/pkg/templatekit"
@@ -26,7 +27,11 @@ func (r *router) SetRenderWithEmbed(templateFS *embed.FS) *router {
 }
 
 func (r *router) StaticBind(staticFS *embed.FS) *router {
-	subStatic, _ := fs.Sub(staticFS, "static")
+	subStatic, err := fs.Sub(staticFS, "static")
+	if err != nil {
+		logger.Fatalln(err)
+	}
+
 	r.StaticFS("/static", http.FS(subStatic))
 
 	return r

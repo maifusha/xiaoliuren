@@ -3,7 +3,7 @@
     <div class="row row-no-gutters">
         <div class="col-sm-7">
             <span class="help-block">六神起课：所卦事项类型</span>
-            <div class="form-group row input-lg" style="padding-top: 0;">
+            <div class="form-group row input-lg qike_list" style="padding-top: 0;">
                 {{range .qikeList}}
                 <div class="radio">
                     <label>
@@ -104,6 +104,11 @@
 </div>
 <script type="text/javascript">
 $(function () {
+    $("#zeshi").delegate(".qike_list input", "change", function () {
+        var qike = $("#zeshi .qike:checked").val();
+        zhangjue.checkLiushen(qike);
+    });
+
     $("#zeshi").delegate(".zeshi", "click", function () {
         var qike = $("#zeshi .qike:checked").val();
         if (!qike) {return alert("请选择六神起课");}
