@@ -8,11 +8,10 @@ import (
 )
 
 type Jiehuo struct {
-	model *model.Jiehuo
 }
 
 func NewJiehuo() *Jiehuo {
-	return &Jiehuo{model: model.NewJiehuo()}
+	return &Jiehuo{}
 }
 
 func (q *Jiehuo) Find(f *filter.Jiehuo) (models []model.Jiehuo) {

@@ -80,7 +80,7 @@ func (x *xiaoliuren) JieKe(qike liushen.Gongwei, count int) *liushen.Jieke {
 	return liushen.NewJieke(gongwei, model.Name, model.Jixiong, model.Shiyi)
 }
 
-func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) *model.Liushen {
+func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) model.Liushen {
 	shengong, err := repository.NewLiushen().FindById(int(gongwei))
 	if err != nil {
 		logger.Fatalln(err)

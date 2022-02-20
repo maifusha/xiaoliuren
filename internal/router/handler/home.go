@@ -60,7 +60,7 @@ func HomeDianbo(c *gin.Context) {
 	gongwei := liushen.LuogongByTime(liushen.DAAN, date, dizhi)
 
 	xlr := service.NewXiaoliuren()
-	var shengong *model.Liushen
+	var shengong model.Liushen
 	var jiehuoList []model.Jiehuo
 	var duanciList []model.Duanci
 

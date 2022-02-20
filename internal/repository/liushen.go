@@ -3,17 +3,16 @@ package repository
 import "xiaoliuren/internal/model"
 
 type Liushen struct {
-	model *model.Liushen
 }
 
 func NewLiushen() *Liushen {
-	return &Liushen{model: model.NewLiushen()}
+	return &Liushen{}
 }
 
-func (l *Liushen) FindById(id int) (*model.Liushen, error) {
-	result := Db.First(l.model, id)
+func (l *Liushen) FindById(id int) (m model.Liushen, err error) {
+	err = Db.First(&m, id).Error
 
-	return l.model, result.Error
+	return
 }
 
 func (l *Liushen) FindAll() (models []model.Liushen) {

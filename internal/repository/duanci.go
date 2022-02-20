@@ -8,11 +8,10 @@ import (
 )
 
 type Duanci struct {
-	model *model.Duanci
 }
 
 func NewDuanci() *Duanci {
-	return &Duanci{model: model.NewDuanci()}
+	return &Duanci{}
 }
 
 func (d *Duanci) Find(f *filter.Duanci) (models []model.Duanci) {
