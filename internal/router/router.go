@@ -38,17 +38,18 @@ func (r *router) StaticBind(staticFS *embed.FS) *router {
 }
 
 func (r *router) HandleBind() *router {
-	r.GET("/", handler.HomeRedirect)
+	homeHandle := handler.NewHome()
+	r.GET("/", homeHandle.Redirect)
 
 	homeGroup := r.Group("/home")
 	{
-		homeGroup.GET("/index", handler.HomeIndex)
+		homeGroup.GET("/index", homeHandle.Index)
 
-		homeGroup.GET("/jixiong", handler.HomeJixiong)
+		homeGroup.GET("/jixiong", homeHandle.Jixiong)
 
-		homeGroup.GET("/dianbo", handler.HomeDianbo)
+		homeGroup.GET("/dianbo", homeHandle.Dianbo)
 
-		homeGroup.GET("/zeshi", handler.HomeZeshi)
+		homeGroup.GET("/zeshi", homeHandle.Zeshi)
 	}
 
 	return r

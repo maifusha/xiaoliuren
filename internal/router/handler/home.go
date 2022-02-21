@@ -15,11 +15,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func HomeRedirect(c *gin.Context) {
+type Home struct {
+}
+
+func NewHome() *Home {
+	return &Home{}
+}
+
+func (h *Home) Redirect(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/home/index")
 }
 
-func HomeIndex(c *gin.Context) {
+func (h *Home) Index(c *gin.Context) {
 	xlr := service.NewXiaoliuren()
 
 	c.HTML(http.StatusOK, "home/index.tpl", gin.H{
@@ -28,7 +35,7 @@ func HomeIndex(c *gin.Context) {
 	})
 }
 
-func HomeJixiong(c *gin.Context) {
+func (h *Home) Jixiong(c *gin.Context) {
 	req := request.NewJixiong()
 	if c.ShouldBind(req) != nil {
 		c.Status(http.StatusBadRequest)
@@ -53,7 +60,7 @@ func HomeJixiong(c *gin.Context) {
 	})
 }
 
-func HomeDianbo(c *gin.Context) {
+func (h *Home) Dianbo(c *gin.Context) {
 	date := time.Now()
 	lunar := calendar.NewLunarBySolar(date)
 	dizhi := calendar.NowDizhi()
@@ -99,7 +106,7 @@ func HomeDianbo(c *gin.Context) {
 	})
 }
 
-func HomeZeshi(c *gin.Context) {
+func (h *Home) Zeshi(c *gin.Context) {
 	req := request.NewZeshi()
 	if c.ShouldBind(req) != nil {
 		c.Status(http.StatusBadRequest)
