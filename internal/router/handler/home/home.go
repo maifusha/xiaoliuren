@@ -1,4 +1,4 @@
-package handler
+package home
 
 import (
 	"net/http"
@@ -15,18 +15,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Home struct {
-}
-
-func NewHome() *Home {
-	return &Home{}
-}
-
-func (h *Home) Redirect(c *gin.Context) {
+func Redirect(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/home/index")
 }
 
-func (h *Home) Index(c *gin.Context) {
+func Index(c *gin.Context) {
 	xlr := service.NewXiaoliuren()
 
 	c.HTML(http.StatusOK, "home/index.tpl", gin.H{
@@ -35,7 +28,7 @@ func (h *Home) Index(c *gin.Context) {
 	})
 }
 
-func (h *Home) Jixiong(c *gin.Context) {
+func Jixiong(c *gin.Context) {
 	req := request.NewJixiong()
 	if c.ShouldBind(req) != nil {
 		c.Status(http.StatusBadRequest)
@@ -60,7 +53,7 @@ func (h *Home) Jixiong(c *gin.Context) {
 	})
 }
 
-func (h *Home) Dianbo(c *gin.Context) {
+func Dianbo(c *gin.Context) {
 	date := time.Now()
 	lunar := calendar.NewLunarBySolar(date)
 	dizhi := calendar.NowDizhi()
@@ -106,7 +99,7 @@ func (h *Home) Dianbo(c *gin.Context) {
 	})
 }
 
-func (h *Home) Zeshi(c *gin.Context) {
+func Zeshi(c *gin.Context) {
 	req := request.NewZeshi()
 	if c.ShouldBind(req) != nil {
 		c.Status(http.StatusBadRequest)

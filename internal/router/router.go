@@ -5,7 +5,7 @@ import (
 	"io/fs"
 	"net/http"
 
-	"xiaoliuren/internal/router/handler"
+	homehandler "xiaoliuren/internal/router/handler/home"
 	"xiaoliuren/internal/util/logger"
 	"xiaoliuren/pkg/templatekit"
 
@@ -38,18 +38,17 @@ func (r *router) StaticBind(staticFS *embed.FS) *router {
 }
 
 func (r *router) HandleBind() *router {
-	homeHandle := handler.NewHome()
-	r.GET("/", homeHandle.Redirect)
+	r.GET("/", homehandler.Redirect)
 
 	homeGroup := r.Group("/home")
 	{
-		homeGroup.GET("/index", homeHandle.Index)
+		homeGroup.GET("/index", homehandler.Index)
 
-		homeGroup.GET("/jixiong", homeHandle.Jixiong)
+		homeGroup.GET("/jixiong", homehandler.Jixiong)
 
-		homeGroup.GET("/dianbo", homeHandle.Dianbo)
+		homeGroup.GET("/dianbo", homehandler.Dianbo)
 
-		homeGroup.GET("/zeshi", homeHandle.Zeshi)
+		homeGroup.GET("/zeshi", homehandler.Zeshi)
 	}
 
 	return r
