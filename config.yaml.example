@@ -2,6 +2,7 @@ mode: debug
 server:
   host:
   port: 8000
+  idle_timeout: 75
 sqlite3:
   path: ./sqlite.db
 logfile:

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"time"
 
 	"xiaoliuren/internal/config"
 	"xiaoliuren/internal/router"
@@ -37,8 +38,9 @@ func main() {
 
 	handler := router.New(gin.Default()).SetRenderWithEmbed(&templateFS)
 	srv := &http.Server{
-		Addr:    fmt.Sprintf("%s:%s", config.Conf.Server.Host, config.Conf.Server.Port),
-		Handler: handler.StaticBind(&staticFS).HandleBind(),
+		Addr:        fmt.Sprintf("%s:%s", config.Conf.Server.Host, config.Conf.Server.Port),
+		Handler:     handler.StaticBind(&staticFS).HandleBind(),
+		IdleTimeout: time.Second * time.Duration(config.Conf.Server.IdleTimeout),
 	}
 
 	go grace.New(srv).Down()

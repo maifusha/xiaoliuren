@@ -24,8 +24,9 @@ func NewConfig() *Config {
 }
 
 type Server struct {
-	Host string
-	Port string
+	Host        string
+	Port        string
+	IdleTimeout int
 }
 
 type Sqlite3 struct {
