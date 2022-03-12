@@ -1,18 +1,18 @@
-.PHONY: default build run gotool image container clean
+.PHONY: default gotool run build image container clean
 APP=xiaoliuren
 
-default: build run
-
-build:
-	CGO_ENABLED=1 go build -ldflags "-w -s" -o ${APP} -v
-
-run:
-	go run -race main.go
+default: gotool run
 
 gotool:
 	go mod tidy
 	go vet ./...
 	go fmt ./...
+
+run:
+	go run -race main.go
+
+build:
+	CGO_ENABLED=1 go build -ldflags "-w -s" -o ${APP} -v
 
 image:
 	docker login --username $$(head -n 1 credential.docker) --password $$(tail -n 1 credential.docker)
