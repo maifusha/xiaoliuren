@@ -7,7 +7,7 @@ build:
 	CGO_ENABLED=1 go build -ldflags "-w -s" -o ${APP} -v
 
 run:
-	./${APP}
+	go run -race main.go
 
 gotool:
 	go mod tidy
