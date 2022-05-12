@@ -11,7 +11,7 @@ import (
 	"xiaoliuren/internal/repository"
 	"xiaoliuren/internal/util/logger"
 	"xiaoliuren/pkg/calendar"
-	"xiaoliuren/pkg/liushen"
+	"xiaoliuren/pkg/liuren"
 )
 
 type xiaoliuren struct {
@@ -21,32 +21,16 @@ func NewXiaoliuren() *xiaoliuren {
 	return &xiaoliuren{}
 }
 
-func (x *xiaoliuren) GetLunarTime(date time.Time, dizhi calendar.Dizhi) string {
-	lunar := calendar.NewLunarBySolar(date)
-	dizhiHour := calendar.NewDizhiHour(dizhi)
-
-	return fmt.Sprintf("%s %s", lunar.String(), dizhiHour.Name())
-}
-
-func (x *xiaoliuren) GetSolarTime(date time.Time, dizhi calendar.Dizhi) string {
-	dizhiHour := calendar.NewDizhiHour(dizhi)
-
-	return fmt.Sprintf("%s %s", date.Format("2006-01-02"), dizhiHour.Period())
-}
-
 func (x *xiaoliuren) LiushenList() []model.Liushen {
 	qikeList := repository.NewLiushen().FindAll()
 
 	return qikeList
 }
 
-func (x *xiaoliuren) GetSanGong(qike liushen.Gongwei, date time.Time, dizhi calendar.Dizhi) (yueke *liushen.Jieke, rike *liushen.Jieke, shike *liushen.Jieke) {
-	lunar := calendar.NewLunarBySolar(date)
-	dizhiHour := calendar.NewDizhiHour(dizhi)
-
+func (x *xiaoliuren) GetSanGong(qike liuren.Gongwei, lunar *calendar.Lunar, dizhi *calendar.Dizhi) (yueke *liuren.Jieke, rike *liuren.Jieke, shike *liuren.Jieke) {
 	month := lunar.MonthInt()
 	day := lunar.DayInt()
-	hour := int(dizhiHour.Dizhi)
+	hour := dizhi.HourInt()
 
 	var wg sync.WaitGroup
 	wg.Add(3)
@@ -70,23 +54,23 @@ func (x *xiaoliuren) GetSanGong(qike liushen.Gongwei, date time.Time, dizhi cale
 	return
 }
 
-func (x *xiaoliuren) JieKe(qike liushen.Gongwei, count int) *liushen.Jieke {
-	gongwei := liushen.LuogongByCount(qike, count)
-	model, err := repository.NewLiushen().FindById(int(gongwei))
+func (x *xiaoliuren) JieKe(qike liuren.Gongwei, count int) *liuren.Jieke {
+	gongwei := liuren.FingerByCount(qike, count)
+	liushen, err := repository.NewLiushen().FindById(int(gongwei))
 	if err != nil {
 		logger.Fatalln(err)
 	}
 
-	return liushen.NewJieke(gongwei, model.Name, model.Jixiong, model.Shiyi)
+	return liuren.NewJieke(gongwei, liushen.Name, liushen.Jixiong, liushen.Shiyi)
 }
 
-func (x *xiaoliuren) GetShengong(gongwei liushen.Gongwei) model.Liushen {
-	shengong, err := repository.NewLiushen().FindById(int(gongwei))
+func (x *xiaoliuren) GetLiushen(gongwei liuren.Gongwei) model.Liushen {
+	liushen, err := repository.NewLiushen().FindById(int(gongwei))
 	if err != nil {
 		logger.Fatalln(err)
 	}
 
-	return shengong
+	return liushen
 }
 
 func (x *xiaoliuren) JiehuoList(f *filter.Jiehuo) []model.Jiehuo {
@@ -101,7 +85,7 @@ func (x *xiaoliuren) DuanciList(f *filter.Duanci) []model.Duanci {
 	return duanciList
 }
 
-func (x *xiaoliuren) JudgeHoursForDate(qike liushen.Gongwei, date time.Time) (
+func (x *xiaoliuren) JudgeHoursForDate(qike liuren.Gongwei, date time.Time) (
 	daanList []interface{},
 	liulianList []interface{},
 	suxiList []interface{},
@@ -109,33 +93,34 @@ func (x *xiaoliuren) JudgeHoursForDate(qike liushen.Gongwei, date time.Time) (
 	xiaojiList []interface{},
 	kongwangList []interface{},
 ) {
-	var dizhis []calendar.Dizhi
+	var hours []calendar.Hour
 	for k := range calendar.DizhiHours {
-		dizhis = append(dizhis, k)
+		hours = append(hours, k)
 	}
-	sort.Slice(dizhis, func(i, j int) bool {
-		return dizhis[i] < dizhis[j]
+	sort.Slice(hours, func(i, j int) bool {
+		return hours[i] < hours[j]
 	})
 
-	for _, dizhi := range dizhis {
-		dizhiHour := calendar.DizhiHours[dizhi]
+	lunar := calendar.NewLunarBySolar(date)
+	for _, hour := range hours {
+		dizhi := calendar.NewDizhi(hour)
 		item := struct {
 			DizhiName string `json:"dizhi_name"`
 			SolarTime string `json:"solar_time"`
-		}{dizhiHour[0], fmt.Sprintf("%s %s", date.Format("2006-01-02"), dizhiHour[1])}
+		}{dizhi.Name(), fmt.Sprintf("%s %s", date.Format("2006-01-02"), dizhi.Period())}
 
-		switch liushen.LuogongByTime(qike, date, dizhi) {
-		case liushen.DAAN:
+		switch liuren.FingerByTime(qike, lunar, dizhi) {
+		case liuren.DAAN:
 			daanList = append(daanList, item)
-		case liushen.LIULIAN:
+		case liuren.LIULIAN:
 			liulianList = append(liulianList, item)
-		case liushen.SUXI:
+		case liuren.SUXI:
 			suxiList = append(suxiList, item)
-		case liushen.CHIKOU:
+		case liuren.CHIKOU:
 			chikouList = append(chikouList, item)
-		case liushen.XIAOJI:
+		case liuren.XIAOJI:
 			xiaojiList = append(xiaojiList, item)
-		case liushen.KONGWANG:
+		case liuren.KONGWANG:
 			kongwangList = append(kongwangList, item)
 		}
 	}

@@ -79,21 +79,21 @@ $(function () {
             $("#dianbo .solar_time").text(resp.solar_time);
 
             var jixiang = /吉/;
-            if (jixiang.test(resp.shengong.jixiong)) {
+            if (jixiang.test(resp.liushen.jixiong)) {
                 $(".luogong_label").removeClass("label-success").addClass("label-danger");
             } else {
                 $(".luogong_label").removeClass("label-danger").addClass("label-success");
             }
-            $(".luogong_label b").text(resp.shengong.name);
-            $(".luogong_label small").text(resp.shengong.jixiong);
-            $(".luogong_shiyi").text(resp.shengong.shiyi);
-            $(".guirenchongfan").text(resp.shengong.guirenchongfan);
-            $(".paiweishu").text(resp.shengong.paiweishu);
-            $(".gongweishu").text(resp.shengong.gongweishu);
-            $(".jiyuanfangwei").text(resp.shengong.fangwei);
-            $(".wuxin").text(resp.shengong.wuxin);
-            $(".shensha").text(resp.shengong.shensha);
-            $(".bagua").text(resp.shengong.bagua);
+            $(".luogong_label b").text(resp.liushen.name);
+            $(".luogong_label small").text(resp.liushen.jixiong);
+            $(".luogong_shiyi").text(resp.liushen.shiyi);
+            $(".guirenchongfan").text(resp.liushen.guirenchongfan);
+            $(".paiweishu").text(resp.liushen.paiweishu);
+            $(".gongweishu").text(resp.liushen.gongweishu);
+            $(".jiyuanfangwei").text(resp.liushen.fangwei);
+            $(".wuxin").text(resp.liushen.wuxin);
+            $(".shensha").text(resp.liushen.shensha);
+            $(".bagua").text(resp.liushen.bagua);
 
             $(".jiehuo_list").empty();
             resp.jiehuo_list.forEach(function(jiehuo){

@@ -18,30 +18,30 @@ var (
 	}
 )
 
-type lunar struct {
-	Year, Month, Day string
+type Lunar struct {
+	year, month, day string
 }
 
-func NewLunarBySolar(solar time.Time) *lunar {
+func NewLunarBySolar(solar time.Time) *Lunar {
 	lunarStr := thirdlunar.Lunar(solar.Format("20060102"))
 	result := regexp.MustCompile(`(?P<year>.*)年(?P<month>.*)月(?P<day>.*)`).FindAllStringSubmatch(lunarStr, -1)
 	year, month, day := result[0][1], result[0][2], result[0][3]
 
-	return &lunar{
-		Year:  string([]rune(year)[0:2]) + "年",
-		Month: strings.NewReplacer("一", "正", "十二", "腊").Replace(month) + "月",
-		Day:   strings.NewReplacer("廿十", "二十", "卅十", "三十").Replace(day),
+	return &Lunar{
+		year:  string([]rune(year)[0:2]) + "年",
+		month: strings.NewReplacer("一", "正", "十二", "腊").Replace(month) + "月",
+		day:   strings.NewReplacer("廿十", "二十", "卅十", "三十").Replace(day),
 	}
 }
 
-func (l *lunar) MonthInt() int {
-	return lunarMonths[l.Month]
+func (l *Lunar) MonthInt() int {
+	return lunarMonths[l.month]
 }
 
-func (l *lunar) DayInt() int {
-	return lunarDays[l.Day]
+func (l *Lunar) DayInt() int {
+	return lunarDays[l.day]
 }
 
-func (l *lunar) String() string {
-	return fmt.Sprintf("%s %s%s", l.Year, l.Month, l.Day)
+func (l *Lunar) String() string {
+	return fmt.Sprintf("%s %s%s", l.year, l.month, l.day)
 }

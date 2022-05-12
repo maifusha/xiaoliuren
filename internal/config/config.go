@@ -7,20 +7,16 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var Conf *Config
+var Conf config
 
 const CONF_FILE = "./config.yaml"
 
-type Config struct {
+type config struct {
 	Mode string
 
 	Server
 	Sqlite3
 	Logfile
-}
-
-func NewConfig() *Config {
-	return &Config{}
 }
 
 type Server struct {
@@ -45,8 +41,7 @@ func init() {
 		log.Fatalln("Please uncomment the config.yaml.example into config.yaml and update it!")
 	}
 
-	Conf = NewConfig()
-	err = yaml.Unmarshal(data, Conf)
+	err = yaml.Unmarshal(data, &Conf)
 	if err != nil {
 		log.Fatalf("Parse config.yaml error：%s\n", err)
 	}

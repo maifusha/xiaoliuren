@@ -8,15 +8,15 @@ import (
 	"github.com/gin-contrib/multitemplate"
 )
 
-type templateKit struct {
+type templatekit struct {
 	fs *embed.FS
 }
 
-func New(fs *embed.FS) *templateKit {
-	return &templateKit{fs: fs}
+func New(fs *embed.FS) *templatekit {
+	return &templatekit{fs: fs}
 }
 
-func (t *templateKit) MultiRender() multitemplate.Renderer {
+func (t *templatekit) MultiRender() multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
 
 	var fragments string

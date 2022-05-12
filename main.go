@@ -43,7 +43,7 @@ func main() {
 		IdleTimeout: time.Second * time.Duration(config.Conf.Server.IdleTimeout),
 	}
 
-	go grace.New(srv).Down()
+	go grace.New(srv).ListenDown()
 
 	if err := srv.ListenAndServe(); err != nil {
 		logger.Printf("Server error: %s\n", err)

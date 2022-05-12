@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-type Dizhi int
+type Hour int
 
 const (
-	_ Dizhi = iota
+	_ Hour = iota
 	ZISHI
 	CHOUSHI
 	YINSHI
@@ -23,7 +23,7 @@ const (
 	HAISHI
 )
 
-var DizhiHours = map[Dizhi][]string{
+var DizhiHours = map[Hour][]string{
 	ZISHI:   {"子时", "23:00~01:00"},
 	CHOUSHI: {"丑时", "01:00~03:00"},
 	YINSHI:  {"寅时", "03:00~05:00"},
@@ -38,31 +38,36 @@ var DizhiHours = map[Dizhi][]string{
 	HAISHI:  {"亥时", "21:00~23:00"},
 }
 
-type DizhiHour struct {
-	Dizhi Dizhi
+type Dizhi struct {
+	Hour
 }
 
-func NewDizhiHour(dizhi Dizhi) *DizhiHour {
-	return &DizhiHour{Dizhi: dizhi}
+func NewDizhi(hour Hour) *Dizhi {
+	return &Dizhi{Hour: hour}
 }
 
-func (d *DizhiHour) Name() string {
-	return DizhiHours[d.Dizhi][0]
+func (d *Dizhi) HourInt() int {
+	return int(d.Hour)
 }
 
-func (d *DizhiHour) Period() string {
-	return DizhiHours[d.Dizhi][1]
+func (d *Dizhi) Name() string {
+	return DizhiHours[d.Hour][0]
 }
 
-func NowDizhi() Dizhi {
+func (d *Dizhi) Period() string {
+	return DizhiHours[d.Hour][1]
+}
+
+func NowDizhi() *Dizhi {
 	now := time.Now().Format("15:04")
 
+	var hour Hour
 	for k, v := range DizhiHours {
 		period := strings.Split(v[1], "~")
 		if strings.Compare(now, period[0]) >= 0 && strings.Compare(now, period[1]) < 0 {
-			return k
+			hour = k
 		}
 	}
 
-	return ZISHI
+	return NewDizhi(hour)
 }

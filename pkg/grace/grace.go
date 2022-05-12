@@ -2,11 +2,11 @@ package grace
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+	"xiaoliuren/internal/util/logger"
 )
 
 type grace struct {
@@ -21,13 +21,13 @@ func New(server *http.Server) *grace {
 	return &grace{srv: server, quit: quit}
 }
 
-func (g *grace) Down() {
+func (g *grace) ListenDown() {
 	<-g.quit
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if err := g.srv.Shutdown(ctx); err != nil {
-		log.Printf("Server grace shutdown error: %s\n", err)
+		logger.Printf("Server grace shutdown error: %s\n", err)
 	}
 }

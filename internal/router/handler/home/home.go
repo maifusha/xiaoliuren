@@ -1,6 +1,7 @@
 package home
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -10,7 +11,7 @@ import (
 	"xiaoliuren/internal/request"
 	"xiaoliuren/internal/service"
 	"xiaoliuren/pkg/calendar"
-	"xiaoliuren/pkg/liushen"
+	"xiaoliuren/pkg/liuren"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,16 +36,17 @@ func Jixiong(c *gin.Context) {
 		return
 	}
 
-	xlr := service.NewXiaoliuren()
-	yueke, rike, shike := xlr.GetSanGong(req.Qike, req.Date, req.Dizhi)
-
 	lunar := calendar.NewLunarBySolar(req.Date)
+	dizhi := calendar.NewDizhi(req.Dizhi)
+
+	xlr := service.NewXiaoliuren()
+	yueke, rike, shike := xlr.GetSanGong(req.Qike, lunar, dizhi)
 
 	c.JSON(http.StatusOK, gin.H{
 		"qike":         req.Qike,
-		"finger_count": lunar.MonthInt() + lunar.DayInt() + int(req.Dizhi) - 2,
-		"lunar_time":   xlr.GetLunarTime(req.Date, req.Dizhi),
-		"solar_time":   xlr.GetSolarTime(req.Date, req.Dizhi),
+		"finger_count": lunar.MonthInt() + lunar.DayInt() + dizhi.HourInt() - 2,
+		"lunar_time":   fmt.Sprintf("%s %s", lunar.String(), dizhi.Name()),
+		"solar_time":   fmt.Sprintf("%s %s", req.Date.Format("2006-01-02"), dizhi.Period()),
 		"sangong": gin.H{
 			"yueke": yueke,
 			"rike":  rike,
@@ -57,10 +59,10 @@ func Dianbo(c *gin.Context) {
 	date := time.Now()
 	lunar := calendar.NewLunarBySolar(date)
 	dizhi := calendar.NowDizhi()
-	gongwei := liushen.LuogongByTime(liushen.DAAN, date, dizhi)
+	gongwei := liuren.FingerByTime(liuren.DAAN, lunar, dizhi)
 
 	xlr := service.NewXiaoliuren()
-	var shengong model.Liushen
+	var liushen model.Liushen
 	var jiehuoList []model.Jiehuo
 	var duanciList []model.Duanci
 
@@ -69,7 +71,7 @@ func Dianbo(c *gin.Context) {
 
 	go func() {
 		defer wg.Done()
-		shengong = xlr.GetShengong(gongwei)
+		liushen = xlr.GetLiushen(gongwei)
 	}()
 
 	go func() {
@@ -89,11 +91,11 @@ func Dianbo(c *gin.Context) {
 	wg.Wait()
 
 	c.JSON(http.StatusOK, gin.H{
-		"qike":         liushen.DAAN,
-		"finger_count": lunar.MonthInt() + lunar.DayInt() + int(dizhi) - 2,
-		"lunar_time":   xlr.GetLunarTime(date, dizhi),
-		"solar_time":   xlr.GetSolarTime(date, dizhi),
-		"shengong":     shengong,
+		"qike":         liuren.DAAN,
+		"finger_count": lunar.MonthInt() + lunar.DayInt() + dizhi.HourInt() - 2,
+		"lunar_time":   fmt.Sprintf("%s %s", lunar.String(), dizhi.Name()),
+		"solar_time":   fmt.Sprintf("%s %s", date.Format("2006-01-02"), dizhi.Period()),
+		"liushen":      liushen,
 		"jiehuo_list":  jiehuoList,
 		"duanci_list":  duanciList,
 	})
